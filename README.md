@@ -1,8 +1,6 @@
-# Capistrano::LocalBranchCheck
+# capistrano/local_branch_check
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/capistrano/local_branch_check`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This gem check local git branch before all Capistrano tasks, to prevents deployment in wrong branch (that branch may contain unexpected deploy configurations).
 
 ## Installation
 
@@ -22,7 +20,31 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Add line below to `Capifile`.
+
+```ruby
+require "capistrano/local_branch_check"
+```
+
+If local branch is equal to release branch, no configuration required.
+If local branch is differ from release branch, please set `local_branch` variable like below.
+
+```ruby
+set :branch, "v2"
+set :local_branch, "master"
+```
+
+When you run `cap` command (with stage name), checks local branch. And if it is wrong, prints message below and abort deployment.
+
+        ================================================================================
+        !!! Local branch `master` maybe wrong. Please `git checkout release`. !!!
+        ================================================================================
+
+If you want to skip check, please set `skip_local_branch_check` variable to `true`.
+
+```ruby
+set :skip_local_branch_check, true
+```
 
 ## Development
 
